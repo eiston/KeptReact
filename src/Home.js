@@ -1,109 +1,112 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
+  TouchableOpacity,
   View,
   Text,
   StatusBar,
+  Image,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Container, Header, Content, Footer, FooterTab, Title, Left, Right, Button, Icon } from 'native-base';
+
+import JobPosting from './components/JobPosting';
 
 class Home extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      pageTab: 0,
+    }
+  }
+
   render() {
     return (
       <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <Header />
-            {global.HermesInternal == null ? null : (
-              <View style={styles.engine}>
-                <Text style={styles.footer}>Engine: Hermes</Text>
-              </View>
-            )}
-            <View style={styles.body}>
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Step One</Text>
-                <Text style={styles.sectionDescription}>
-                  Edit <Text style={styles.highlight}>App.js</Text> to change
-                  sdfsdfsdgfdg.
-                </Text>
-              </View>
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>See Your Changes</Text>
-                <Text style={styles.sectionDescription}>
-                  <ReloadInstructions />
-                </Text>
-              </View>
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Debug</Text>
-                <Text style={styles.sectionDescription}>
-                  <DebugInstructions />
-                </Text>
-              </View>
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Learn More</Text>
-                <Text style={styles.sectionDescription}>
-                  Read the docs to discover what to do next:
-                </Text>
-              </View>
-              <LearnMoreLinks />
-            </View>
-          </ScrollView>
-        </SafeAreaView>
+        <Container>
+          <Header style={styles.headerView}>
+            <Left>
+              <Title>Kept</Title>
+            </Left>
+            <Right>
+              <Button transparent>
+                <Icon name='switch' />
+              </Button>
+              <Button transparent>
+                <Icon name='search' />
+              </Button>
+              <Button transparent>
+                <Icon name='list-box' />
+              </Button>
+            </Right>
+          </Header>
+          <Content>
+            {this.state.pageTab === 1 && <JobPosting postings={post} />}
+          </Content>
+          <Footer>
+            <FooterTab>
+              <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 1 })}>
+                <Icon name='paper' />
+                <Text style={styles.footerText}>Postings</Text>
+              </Button>
+              <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 2 })}>
+                <Icon name='list-box' />
+                <Text style={styles.footerText}>Contact</Text>
+              </Button>
+              <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 3 })}>
+                <Icon name='time' />
+                <Text style={styles.footerText}>Schedule</Text>
+              </Button>
+              <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 4 })}>
+                <Icon name='person' />
+                <Text style={styles.footerText}>Profile</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+        </Container>
       </>
     );
   }
 }
 
+const post = [
+  {
+    id: 1,
+    job_type: 'House Cleaning',
+    name: 'test users',
+    job_description: 'House Cleaning',
+    price_high: 35,
+    price_low: 15,
+    start_time: '08:10:00',
+    finish_time: '12:00:00',
+    date: '2019-12-12'
+  },
+  {
+    id: 2,
+    job_type: 'Snow Plowing',
+    name: 'react dev',
+    job_description: 'Snow Plowing',
+    price_high: 25,
+    price_low: 10,
+    start_time: '06:10:00',
+    finish_time: '09:00:00',
+    date: '2019-12-19'
+  }
+];
+
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  headerView: {
+    paddingLeft: 16,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+
+  footerIcon: {
+    paddingVertical: 4
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+
+  footerText: {
+    color: '#ffffff'
+  }
 });
 
 export default Home;
