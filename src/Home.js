@@ -5,19 +5,22 @@ import {
   TouchableOpacity,
   View,
   Text,
-  StatusBar,
-  Image,
 } from 'react-native';
+
+import { SearchBar } from 'react-native-elements';
 
 import { Container, Header, Content, Footer, FooterTab, Title, Left, Right, Button, Icon } from 'native-base';
 
 import JobPosting from './components/JobPosting';
+import SideBar from './components/SiderBar';
 
 class Home extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       pageTab: 0,
+      showSearchBar: false,
+      showOptions: false,
     }
   }
 
@@ -33,15 +36,22 @@ class Home extends React.Component {
               <Button transparent>
                 <Icon name='switch' />
               </Button>
-              <Button transparent>
+              <Button transparent onPress={() => {this.setState({ showSearchBar: !this.state.showSearchBar })}}>
                 <Icon name='search' />
               </Button>
-              <Button transparent>
+              <Button transparent onPress={() => {this.setState({ showOptions: !this.state.showOptions })}}>
                 <Icon name='list-box' />
               </Button>
             </Right>
           </Header>
           <Content>
+            {this.state.showSearchBar &&
+              <SearchBar 
+                cancelIcon
+                lightTheme
+                placeholder="Type Here..."
+              />}
+            {this.state.showOptions && <SideBar />}
             {this.state.pageTab === 1 && <JobPosting postings={post} />}
           </Content>
           <Footer>
@@ -98,6 +108,14 @@ const post = [
 const styles = StyleSheet.create({
   headerView: {
     paddingLeft: 16,
+  },
+
+  searchBoxContainer: {
+    backgroundColor: '#F5F5F5'
+  },
+
+  searchContainer: {
+    backgroundColor: '#ffffff',
   },
 
   footerIcon: {
