@@ -7,18 +7,23 @@ import {
     View,
     Text,
     FlatList
-  } from 'react-native';
+	} from 'react-native';
+	
+import ServiceDetail from './ServiceDetail';
 
 class JobPosting extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			detail_index: -1,
+		}
 	}
 	
 	renderList(posting) {
-		const { name, job_type, job_description, price_high, price_low, start_time, finish_time, date } = posting;
+		const { index, name, job_type, job_description, price_high, price_low, start_time, finish_time, date, rating } = posting;
 		return (
-			<View style={styles.card}>
+			<TouchableOpacity style={styles.card} onPress={() => this.setState({ detail_index: index })}>
 				<View style={styles.cardRow}>
 					<Text style={styles.cardLargeText}>{job_description}</Text>
 					<Text style={styles.cardLargeText}>{`$${price_low} - $${price_high}`}</Text>
@@ -32,19 +37,23 @@ class JobPosting extends React.Component {
 					</View>
 					<Text style={styles.contentText}>{job_type}</Text>
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 
 	render() {
 		const { postings } = this.props;
+		const { detail_index } = this.state;
+		if (detail_index >= 0) {
+			return (<ServiceDetail posting={postings[detail_index]} />)
+		}
 		return (
 			<>
 				<FlatList 
-					data={postings}
-					renderItem={({ item }) => this.renderList(item)}
-					keyExtractor={item => item.id}
-				/>
+						data={postings}
+						renderItem={({ item, index }) => this.renderList({...item, index})}
+						keyExtractor={item => item.id}
+					/>
 			</>
 		);
 
@@ -71,7 +80,7 @@ const styles = StyleSheet.create({
 	},
 
 	imageIcon: {
-		width: '12%',
+		width: '4%',
 		padding: 10
 	},
 

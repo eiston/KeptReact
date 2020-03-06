@@ -18,6 +18,7 @@ class Home extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      title: 'Kept',
       pageTab: 0,
       showSearchBar: false,
       showOptions: false,
@@ -30,7 +31,7 @@ class Home extends React.Component {
         <Container>
           <Header style={styles.headerView}>
             <Left>
-              <Title>Kept</Title>
+              <Title>{this.state.title}</Title>
             </Left>
             <Right>
               <Button transparent>
@@ -90,7 +91,8 @@ const post = [
     price_low: 15,
     start_time: '08:10:00',
     finish_time: '12:00:00',
-    date: '2019-12-12'
+    date: '2019-12-12',
+    rating: 0.8,
   },
   {
     id: 2,
@@ -101,7 +103,8 @@ const post = [
     price_low: 10,
     start_time: '06:10:00',
     finish_time: '09:00:00',
-    date: '2019-12-19'
+    date: '2019-12-19',
+    rating: 0.7,
   }
 ];
 
