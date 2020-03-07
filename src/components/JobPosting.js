@@ -5,10 +5,12 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
-    Text,
     FlatList
 	} from 'react-native';
 	
+
+import { Button, Text } from 'native-base';
+
 import ServiceDetail from './ServiceDetail';
 
 class JobPosting extends React.Component {
@@ -25,7 +27,7 @@ class JobPosting extends React.Component {
 		return (
 			<TouchableOpacity style={styles.card} onPress={() => this.setState({ detail_index: index })}>
 				<View style={styles.cardRow}>
-					<Text style={styles.cardLargeText}>{job_description}</Text>
+					<Text style={styles.cardLargeText}>{job_type}</Text>
 					<Text style={styles.cardLargeText}>{`$${price_low} - $${price_high}`}</Text>
 				</View>
 				<View style={styles.cardRow}>
@@ -48,25 +50,37 @@ class JobPosting extends React.Component {
 			return (<ServiceDetail posting={postings[detail_index]} />)
 		}
 		return (
-			<>
+			<View style={styles.container}>
 				<FlatList 
-						data={postings}
-						renderItem={({ item, index }) => this.renderList({...item, index})}
-						keyExtractor={item => item.id}
-					/>
-			</>
+					style={styles.containerList}
+					data={postings}
+					renderItem={({ item, index }) => this.renderList({...item, index})}
+					keyExtractor={item => item.id}
+				/>
+				<Button block style={styles.postButton}>
+					<Text>Post a Job</Text>
+				</Button>
+			</View>
 		);
 
 	}
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+
+	containerList: {
+		flex: 1,
+	},
+
 	card: {
 		marginHorizontal: 8,
 		marginTop: 8,
 		padding: 6,
 		borderRadius: 6,
-		backgroundColor: '#F5F5F5'
+		backgroundColor: '#F2F3F4'
 	},
 
 	cardRow: {
@@ -90,9 +104,14 @@ const styles = StyleSheet.create({
 
 	timeText: {
 		fontSize: 16,
-		color: '#999',
-	}
+		color: '#424949',
+	},
 
+	postButton: {
+		height: 40,
+		marginVertical: 20,
+		marginHorizontal: 8,
+  }
 });
 
 export default JobPosting;

@@ -6,6 +6,4 @@ const rootReducer = combineReducers({
 	jobPosting: jobPostingReducer
 });
 
-// const store = () => 
-
 export default createStore(rootReducer);

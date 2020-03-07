@@ -19,7 +19,7 @@ class Home extends React.Component {
     super(props);
     this.state = {
       title: 'Kept',
-      pageTab: 0,
+      pageTab: 1,
       showSearchBar: false,
       showOptions: false,
     }
@@ -45,17 +45,18 @@ class Home extends React.Component {
               </Button>
             </Right>
           </Header>
-          <Content>
-            {this.state.showSearchBar &&
-              <SearchBar 
-                cancelIcon
-                lightTheme
-                placeholder="Type Here..."
-              />}
-            {this.state.showOptions && <SideBar />}
-            {this.state.pageTab === 1 && <JobPosting postings={post} />}
+          <Content contentContainerStyle={{ flexGrow: 1 }}>
+              {this.state.showSearchBar &&
+                <SearchBar 
+                  cancelIcon
+                  lightTheme
+                  placeholder="Type Here..."
+                />}
+              {this.state.showOptions && <SideBar />}
+              {this.state.pageTab === 1 && <JobPosting postings={post} />}
           </Content>
           <Footer>
+            
             <FooterTab>
               <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 1 })}>
                 <Icon name='paper' />
@@ -86,7 +87,8 @@ const post = [
     id: 1,
     job_type: 'House Cleaning',
     name: 'test users',
-    job_description: 'House Cleaning',
+    job_description: 'Provide house cleaning within KW region',
+    location: 'Waterloo, ON',
     price_high: 35,
     price_low: 15,
     start_time: '08:10:00',
@@ -97,8 +99,9 @@ const post = [
   {
     id: 2,
     job_type: 'Snow Plowing',
+    location: 'North York, ON',
     name: 'react dev',
-    job_description: 'Snow Plowing',
+    job_description: 'Provide snow plowing within GTA',
     price_high: 25,
     price_low: 10,
     start_time: '06:10:00',
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
 
   footerText: {
     color: '#ffffff'
-  }
+  },
 });
 
 export default Home;

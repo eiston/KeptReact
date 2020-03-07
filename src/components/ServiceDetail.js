@@ -6,8 +6,9 @@ import {
 	StyleSheet,
 	TouchableOpacity,
   View,
-  Text,
 } from 'react-native';
+
+import { Button, Text } from 'native-base';
 	
 class ServiceDetail extends React.Component {
 	constructor(props) {
@@ -19,10 +20,10 @@ class ServiceDetail extends React.Component {
 		return (
 			<StarRating 
 				disabled={true}
-				starSize={15}
-				fullStarColor={'#0000FF'}
-				halfStarColor={'#0000FF'}
-				emptyStarColor={'#0000FF'}
+				starSize={20}
+				fullStarColor={'#33FFD1'}
+				halfStarColor={'#33FFD1'}
+				emptyStarColor={'#33FFD1'}
 				maxStars={5}
 				rating={rating * 5}
 			/>
@@ -57,9 +58,29 @@ class ServiceDetail extends React.Component {
 	}
 
 	render() {
+		const { job_type, location, job_description } = this.props.posting;
 		return (
 			<>
 				{this.renderInfoCard()}
+				<Button block style={styles.primButton}>
+          <Text>Book Service</Text>
+        </Button>
+				<View style={styles.card}>
+					<View 
+						style={styles.cardBorderRow}
+					>
+						<Text style={styles.contentText}>Service Type</Text>
+						<Text style={styles.timeText}>{job_type}</Text>
+					</View>
+					<View style={styles.cardBorderRow}>
+						<Text style={styles.contentText}>Location</Text>
+						<Text style={styles.timeText}>{location}</Text>
+					</View>
+				</View>
+				<View style={styles.card}>
+					<Text style= {styles.contentText}>Service Description</Text>
+					<Text style={styles.timeText}>{job_description}</Text>
+				</View>
 			</>
 		);
 	}
@@ -67,14 +88,30 @@ class ServiceDetail extends React.Component {
 
 const styles = StyleSheet.create({
 	card: {
+		minWidth: 80,
 		marginHorizontal: 8,
 		marginTop: 8,
 		padding: 8,
 		borderRadius: 6,
-		backgroundColor: '#F5F5F5'
+		backgroundColor: '#F2F3F4'
+	},
+
+	primButton: {
+		marginVertical: 8,
+		borderRadius: 0
 	},
 
 	cardRow: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+
+	cardBorderRow: {
+		height: 40,
+		paddingTop: 4,
+		paddingBottom: 6,
+		paddingHorizontal: 8,
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -91,11 +128,12 @@ const styles = StyleSheet.create({
 
 	contentText: {
 		fontSize: 16,
+		fontWeight: 'bold'
 	},
 
 	timeText: {
 		fontSize: 16,
-		color: '#999',
+		color: '#424949',
 	},
 
 	clickableText: {
