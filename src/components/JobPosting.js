@@ -12,6 +12,7 @@ import {
 import { Button, Text } from 'native-base';
 
 import ServiceDetail from './ServiceDetail';
+import BookService from './BookService';
 
 class JobPosting extends React.Component {
 
@@ -19,7 +20,15 @@ class JobPosting extends React.Component {
 		super(props);
 		this.state = {
 			detail_index: -1,
+			create_new: false
 		}
+	}
+
+	postJob() {
+		this.setState({
+			detail_index: -1,
+			create_new: true
+		});
 	}
 	
 	renderList(posting) {
@@ -45,9 +54,11 @@ class JobPosting extends React.Component {
 
 	render() {
 		const { postings } = this.props;
-		const { detail_index } = this.state;
+		const { detail_index, create_new } = this.state;
 		if (detail_index >= 0) {
 			return (<ServiceDetail posting={postings[detail_index]} />)
+		} else if (create_new){
+			return (<BookService user={user} />)
 		}
 		return (
 			<View style={styles.container}>
@@ -57,7 +68,7 @@ class JobPosting extends React.Component {
 					renderItem={({ item, index }) => this.renderList({...item, index})}
 					keyExtractor={item => item.id}
 				/>
-				<Button block style={styles.postButton}>
+				<Button block style={styles.postButton} onPress={() => this.postJob()}>
 					<Text>Post a Job</Text>
 				</Button>
 			</View>
@@ -65,6 +76,18 @@ class JobPosting extends React.Component {
 
 	}
 }
+
+const user = {
+  addresses: [
+    '200 University Avenue West',
+    '330 Phillip Street',
+    '365 Albert Street'
+  ],
+  creditCards: [
+    'c1234 *** 1234',
+    'c4321 *** 4321',
+  ]
+};
 
 const styles = StyleSheet.create({
 	container: {
