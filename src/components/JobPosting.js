@@ -7,12 +7,12 @@ import {
     View,
     FlatList
 	} from 'react-native';
-	
 
 import { Button, Text } from 'native-base';
 
 import ServiceDetail from './ServiceDetail';
 import BookService from './BookService';
+import postings from '../api/postings';
 
 class JobPosting extends React.Component {
 
@@ -20,8 +20,20 @@ class JobPosting extends React.Component {
 		super(props);
 		this.state = {
 			detail_index: -1,
-			create_new: false
+			create_new: false,
+			postings: [],
 		}
+	}
+
+	componentDidMount() {
+		this.initPosting(2);
+	}
+
+	async initPosting(providerId) {
+		let res = await postings.getPostings(providerId);
+		this.setState({
+			postings: res.data
+		});
 	}
 
 	postJob() {
@@ -32,29 +44,32 @@ class JobPosting extends React.Component {
 	}
 	
 	renderList(posting) {
-		const { index, name, job_type, job_description, price_high, price_low, start_time, finish_time, date, rating } = posting;
+		const { index, name, type, job_description, price, time, date, provider, rating } = posting;
 		return (
 			<TouchableOpacity style={styles.card} onPress={() => this.setState({ detail_index: index })}>
 				<View style={styles.cardRow}>
-					<Text style={styles.cardLargeText}>{job_type}</Text>
-					<Text style={styles.cardLargeText}>{`$${price_low} - $${price_high}`}</Text>
+					<Text style={styles.cardLargeText}>{name}</Text>
+					<Text style={styles.cardLargeText}>{price}</Text>
 				</View>
 				<View style={styles.cardRow}>
 					<View style={styles.imageIcon}></View>
 					<View>
-						<Text style={styles.contentText}>{name}</Text>
-						<Text style={styles.timeText}>{`${start_time} - ${finish_time}`}</Text>
+						<Text style={styles.contentText}>{provider}</Text>
+						<Text style={styles.timeText}>{time}</Text>
 						<Text style={styles.timeText}>{date}</Text>
 					</View>
-					<Text style={styles.contentText}>{job_type}</Text>
+					<Text style={styles.contentText}>{type}</Text>
 				</View>
 			</TouchableOpacity>
 		);
 	}
 
 	render() {
-		const { postings } = this.props;
-		const { detail_index, create_new } = this.state;
+		const { detail_index, create_new, postings } = this.state;
+		if (!postings || postings.length === 0) {
+			return (<View />);
+		}
+
 		if (detail_index >= 0) {
 			return (<ServiceDetail posting={postings[detail_index]} />)
 		} else if (create_new){

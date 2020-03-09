@@ -31,17 +31,17 @@ class ServiceDetail extends React.Component {
 	}
 
 	renderInfoCard() {
-		const { name, job_type, job_description, start_time, finish_time, date } = this.props.posting;
+		const { name, provider, type, job_description, time, date } = this.props.posting;
 		return (
 			<View style={styles.card}>
 				<View style={styles.cardRow}>
-					<Text style={styles.cardLargeText}>{job_type}</Text>
+					<Text style={styles.cardLargeText}>{name}</Text>
 				</View>
 				<View style={styles.cardRow}>
 					<View style={styles.imageIcon}></View>
 					<View>
-						<Text style={styles.contentText}>{name}</Text>
-						<Text style={styles.timeText}>{`${start_time} - ${finish_time}`}</Text>
+						<Text style={styles.contentText}>{provider}</Text>
+						<Text style={styles.timeText}>{time}</Text>
 						<Text style={styles.timeText}>{date}</Text>
 					</View>
 					<View>
@@ -58,7 +58,7 @@ class ServiceDetail extends React.Component {
 	}
 
 	render() {
-		const { job_type, location, job_description } = this.props.posting;
+		const { type, location, job_description } = this.props.posting;
 		return (
 			<>
 				{this.renderInfoCard()}
@@ -70,7 +70,7 @@ class ServiceDetail extends React.Component {
 						style={styles.cardBorderRow}
 					>
 						<Text style={styles.contentText}>Service Type</Text>
-						<Text style={styles.timeText}>{job_type}</Text>
+						<Text style={styles.timeText}>{type}</Text>
 					</View>
 					<View style={styles.cardBorderRow}>
 						<Text style={styles.contentText}>Location</Text>

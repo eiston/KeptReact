@@ -53,7 +53,7 @@ class Home extends React.Component {
                   placeholder="Type Here..."
                 />}
               {this.state.showOptions && <SideBar />}
-              {this.state.pageTab === 1 && <JobPosting postings={post} />}
+              {this.state.pageTab === 1 && <JobPosting />}
           </Content>
           <Footer>
             
