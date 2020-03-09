@@ -2,6 +2,8 @@
 import React from 'react';
 import StarRating from 'react-native-star-rating';
 
+import postings from '../api/postings';
+
 import {
 	StyleSheet,
 	TouchableOpacity,
@@ -13,10 +15,23 @@ import { Button, Text } from 'native-base';
 class ServiceDetail extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			detail: null
+		}
 	}
 
-	renderStars() {
-		const { rating } = this.props.posting;
+	componentDidMount() {
+		this.initDetail(this.props.detailId);
+	}
+
+	async initDetail(postId) {
+		let res = await postings.getDetails(postId);
+		this.setState({
+			detail: res.data
+		});
+	}
+
+	renderStars(rating) {
 		return (
 			<StarRating 
 				disabled={true}
@@ -30,8 +45,8 @@ class ServiceDetail extends React.Component {
 		)
 	}
 
-	renderInfoCard() {
-		const { name, provider, type, job_description, time, date } = this.props.posting;
+	renderInfoCard(detail) {
+		const { date, name, provider, time, rating } = detail;
 		return (
 			<View style={styles.card}>
 				<View style={styles.cardRow}>
@@ -45,7 +60,7 @@ class ServiceDetail extends React.Component {
 						<Text style={styles.timeText}>{date}</Text>
 					</View>
 					<View>
-						<View>{this.renderStars()}</View>
+						<View>{this.renderStars(rating)}</View>
 						<Text/>
 						<TouchableOpacity>
 							<Text style={styles.clickableText}>View Reviews</Text>
@@ -58,10 +73,14 @@ class ServiceDetail extends React.Component {
 	}
 
 	render() {
-		const { type, location, job_description } = this.props.posting;
+		const { detail } = this.state;
+		if (!detail) {
+			return (<View />)
+		}
+		const { type, location, job_description } = detail;
 		return (
 			<>
-				{this.renderInfoCard()}
+				{this.renderInfoCard(detail)}
 				<Button block style={styles.primButton}>
           <Text>Book Service</Text>
         </Button>
@@ -74,7 +93,7 @@ class ServiceDetail extends React.Component {
 					</View>
 					<View style={styles.cardBorderRow}>
 						<Text style={styles.contentText}>Location</Text>
-						<Text style={styles.timeText}>{location}</Text>
+						<Text style={styles.timeText}>{simplifyAddress(location)}</Text>
 					</View>
 				</View>
 				<View style={styles.card}>
@@ -84,6 +103,11 @@ class ServiceDetail extends React.Component {
 			</>
 		);
 	}
+}
+
+const simplifyAddress = (address) => {
+	const str_list = address.split(',');
+	return (str_list.length > 3) ? `${str_list[1]}, ${str_list[2]}` : address;
 }
 
 const styles = StyleSheet.create({
