@@ -1,9 +1,5 @@
 /* eslint-disable prettier/prettier */
 'use strict';
 
-export const actions = {
-	LOADING_DETAIL: null,
-	DETAIL_COMPLETE: null
-};
-
-module.exports = actions;
+export const FETCH_POSTINGS = 'FETCH_POSTINGS';
+export const COMPLETE_POSTINGS = 'COMPLETE_POSTINGS';

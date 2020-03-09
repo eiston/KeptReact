@@ -14,5 +14,14 @@ module.exports = {
 		const getURL = `${BASE_URL}postings/${postId}/details`;
 		let res = await axios.get(getURL);
 		return res;
+	},
+
+	createPosting: async (postObject) => {
+		const postURL = `${BASE_URL}postings/create`;
+		let res = await axios.post(postURL, postObject);
+
+		console.log(res);
+
+		return res;
 	}
 }

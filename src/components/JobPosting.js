@@ -66,12 +66,13 @@ class JobPosting extends React.Component {
 
 	render() {
 		const { detail_index, create_new, postings } = this.state;
+		console.log(postings);
 		if (!postings || postings.length === 0) {
 			return (<View />);
 		}
 
 		if (detail_index >= 0) {
-			return (<ServiceDetail posting={postings[detail_index]} />)
+			return (<ServiceDetail detailId={postings[detail_index].id} />)
 		} else if (create_new){
 			return (<BookService user={user} />)
 		}

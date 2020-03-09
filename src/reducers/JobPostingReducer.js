@@ -1,25 +1,15 @@
 /* eslint-disable prettier/prettier */
 'user strict';
 
-import { LOADING_DETAIL, DETAIL_COMPLETE } from '../constants'; 
+import { COMPLETE_POSTINGS } from '../constants'; 
 
-const initial = {
-  open: false,
-  loading: false
-};
-
-export default function jobPostingReducer(state = initial, action) {
+export default function jobPostingReducer(state = '', action) {
 	switch (action.type) {
-		case LOADING_DETAIL: 
+		case COMPLETE_POSTINGS: 
 			return {
-				...state,
-				detail_open: false,
-			}
-		case DETAIL_COMPLETE:
-			return {
-				...state,
-				detail_open: true,
-				detail_data: action.postings
+				postingList: action.postingList,
+				page: 1,
+				detailOpen: false,
 			}
 	}
 
