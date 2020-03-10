@@ -1,18 +1,26 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { SearchBar } from 'react-native-elements';
 
-import { Container, Header, Content, Footer, FooterTab, Title, Left, Right, Button, Icon } from 'native-base';
+import { 
+  Container, 
+  Header, 
+  Content, 
+  Footer, 
+  FooterTab, 
+  Title, 
+  Left, 
+  Right, 
+  Button, 
+  Icon, 
+  Text 
+} from 'native-base';
 
 import JobPosting from './components/JobPosting';
 import SideBar from './components/SiderBar';
+import BookService from './components/BookService';
 
 class Home extends React.Component {
   constructor(props){
@@ -24,6 +32,12 @@ class Home extends React.Component {
       showOptions: false,
     }
   }
+
+  postJob() {
+		this.setState({
+			pageTab: -1,
+		});
+	}
 
   render() {
     return (
@@ -53,25 +67,29 @@ class Home extends React.Component {
                   placeholder="Type Here..."
                 />}
               {this.state.showOptions && <SideBar />}
+              {this.state.pageTab === -1 && <BookService user={user} />}
               {this.state.pageTab === 1 && <JobPosting />}
+              <Button block style={styles.postButton} onPress={() => this.postJob()}>
+                <Text>Post a Job</Text>
+              </Button>
           </Content>
           <Footer>
             
             <FooterTab>
               <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 1 })}>
-                <Icon name='paper' />
+                <Icon name="paper" />
                 <Text style={styles.footerText}>Postings</Text>
               </Button>
               <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 2 })}>
-                <Icon name='list-box' />
+                <Icon name="list-box" />
                 <Text style={styles.footerText}>Contact</Text>
               </Button>
               <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 3 })}>
-                <Icon name='time' />
+                <Icon name="time" />
                 <Text style={styles.footerText}>Schedule</Text>
               </Button>
               <Button vertical style={styles.footerIcon} onPress={() => this.setState({ pageTab: 4 })}>
-                <Icon name='person' />
+                <Icon name="person" />
                 <Text style={styles.footerText}>Profile</Text>
               </Button>
             </FooterTab>
@@ -82,34 +100,17 @@ class Home extends React.Component {
   }
 }
 
-const post = [
-  {
-    id: 1,
-    job_type: 'House Cleaning',
-    name: 'test users',
-    job_description: 'Provide house cleaning within KW region',
-    location: 'Waterloo, ON',
-    price_high: 35,
-    price_low: 15,
-    start_time: '08:10:00',
-    finish_time: '12:00:00',
-    date: '2019-12-12',
-    rating: 0.8,
-  },
-  {
-    id: 2,
-    job_type: 'Snow Plowing',
-    location: 'North York, ON',
-    name: 'react dev',
-    job_description: 'Provide snow plowing within GTA',
-    price_high: 25,
-    price_low: 10,
-    start_time: '06:10:00',
-    finish_time: '09:00:00',
-    date: '2019-12-19',
-    rating: 0.7,
-  }
-];
+const user = {
+  addresses: [
+    '200 University Avenue West',
+    '330 Phillip Street',
+    '365 Albert Street'
+  ],
+  creditCards: [
+    'c1234 *** 1234',
+    'c4321 *** 4321',
+  ]
+};
 
 const styles = StyleSheet.create({
   headerView: {
@@ -131,6 +132,12 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#ffffff'
   },
+
+  postButton: {
+		height: 40,
+		marginVertical: 12,
+		marginHorizontal: 8,
+  }
 });
 
 export default Home;

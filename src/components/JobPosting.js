@@ -8,7 +8,7 @@ import {
     FlatList
 	} from 'react-native';
 
-import { Button, Text } from 'native-base';
+import { Button, Text, Icon, Spinner } from 'native-base';
 
 import ServiceDetail from './ServiceDetail';
 import BookService from './BookService';
@@ -26,7 +26,7 @@ class JobPosting extends React.Component {
 	}
 
 	componentDidMount() {
-		this.initPosting(2);
+		this.initPosting(1);
 	}
 
 	async initPosting(providerId) {
@@ -35,16 +35,9 @@ class JobPosting extends React.Component {
 			postings: res.data
 		});
 	}
-
-	postJob() {
-		this.setState({
-			detail_index: -1,
-			create_new: true
-		});
-	}
 	
 	renderList(posting) {
-		const { index, name, type, job_description, price, time, date, provider, rating } = posting;
+		const { index, name, type, price, time, date, provider, rating } = posting;
 		return (
 			<TouchableOpacity style={styles.card} onPress={() => this.setState({ detail_index: index })}>
 				<View style={styles.cardRow}>
@@ -66,16 +59,15 @@ class JobPosting extends React.Component {
 
 	render() {
 		const { detail_index, create_new, postings } = this.state;
-		console.log(postings);
+
 		if (!postings || postings.length === 0) {
-			return (<View />);
+			return (<Spinner />);
 		}
 
 		if (detail_index >= 0) {
 			return (<ServiceDetail detailId={postings[detail_index].id} />)
-		} else if (create_new){
-			return (<BookService user={user} />)
-		}
+		} 
+
 		return (
 			<View style={styles.container}>
 				<FlatList 
@@ -84,26 +76,11 @@ class JobPosting extends React.Component {
 					renderItem={({ item, index }) => this.renderList({...item, index})}
 					keyExtractor={item => item.id}
 				/>
-				<Button block style={styles.postButton} onPress={() => this.postJob()}>
-					<Text>Post a Job</Text>
-				</Button>
 			</View>
 		);
 
 	}
 }
-
-const user = {
-  addresses: [
-    '200 University Avenue West',
-    '330 Phillip Street',
-    '365 Albert Street'
-  ],
-  creditCards: [
-    'c1234 *** 1234',
-    'c4321 *** 4321',
-  ]
-};
 
 const styles = StyleSheet.create({
 	container: {
@@ -128,6 +105,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 
+	loadingSection: {
+		alignItems: 'center',
+		marginVertical: 8,
+	},
+
 	cardLargeText: {
 		fontSize: 24
 	},
@@ -144,13 +126,7 @@ const styles = StyleSheet.create({
 	timeText: {
 		fontSize: 16,
 		color: '#424949',
-	},
-
-	postButton: {
-		height: 40,
-		marginVertical: 20,
-		marginHorizontal: 8,
-  }
+	}
 });
 
 export default JobPosting;

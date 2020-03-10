@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { StyleSheet } from 'react-native';
-import { List, ListItem, Text, Left, Right, Button, Icon, Radio, Form, Picker, Input, Textarea, DatePicker } from "native-base";
+import { List, ListItem, Item, Text, Left, Right, Button, Icon, Radio, Form, Picker, Input, Textarea, DatePicker, Toast } from "native-base";
 
 import postings from '../api/postings';
 import { compareTime } from '../helper';
@@ -13,11 +13,11 @@ class BookService extends React.Component {
 		this.state = {
 			name: '',
 			description: '',
-			chosenDate: new Date(),
-			start_time: null,
-			finish_time: null,
-			maxPrice: 0,
-			minPrice: 0,
+			date: new Date(),
+			wrong_price: false,
+			wrong_time: false,
+			price_high: null,
+			price_low: null,
 			selectedAddress: null,
 			selectedCard: null,
 			job_type: 'Unselected'
@@ -33,29 +33,41 @@ class BookService extends React.Component {
 	}
 
 	async confirmSend() {
-		const { maxPrice, minPrice, start_time, finish_time } = this.state;
-		if (maxPrice === 0 || minPrice === 0 || maxPrice < minPrice) {
+		const { price_high, price_low, start_time, finish_time, job_type, description, name, date } = this.state;
+		if (price_high === 0 || price_low === 0 || price_high < price_low) {
 			this.setState({
-				maxPrice: 0,
-				minPrice:0
+				price_low: 0,
+				price_high: 0,
+				wrong_price: true
 			});
-			console.error('Invalid Price');
+			return;
 		}
 		if (!compareTime(start_time, finish_time)) {
 			this.setState({
-				maxPrice: null,
-				minPrice: null
+				start_time: null,
+				finish_time: null,
+				wrong_time: true
 			});
-			console.error('Invalid time range');
+			return;
 		}
+		this.setState({
+			start_time: `${this.state.date.toISOString().slice(0, 10)} ${this.state.start_time}`,
+			finish_time: `${this.state.date.toISOString().slice(0, 10)} ${this.state.finish_time}`
+		});
 		const post = {
-			...this.state,
-			author_id : 1,
+			name,
+			description,
+			job_type,
+			price_high,
+			price_low,
+			start_time: `${date.toISOString().slice(0, 10)} ${start_time}`,
+			finish_time: `${date.toISOString().slice(0, 10)} ${finish_time}`,
+			author : 1,
 			housing_id: 1,
 			is_provider: false
-		}
+		};
 
-		await postings.createPosting(post);
+		const res = await postings.createPosting(post);
 
 	}
 
@@ -72,7 +84,7 @@ class BookService extends React.Component {
 					defaultDate={new Date()}
 					androidMode={'default'}
 					placeHolderText="Select date"
-					onDateChange={(newDate) => this.setState({ chosenDate: newDate.toString() })}
+					onDateChange={(newDate) => this.setState({ date: newDate })}
 				/>
 			</>
 		)
@@ -110,20 +122,20 @@ class BookService extends React.Component {
 					<ListItem>
 						{this.renderDatePicker()}
 					</ListItem>
-					<ListItem>
+					<Item error={this.state.wrong_time}>
 						<Input
 							placeholder="Set Start Time"
 							value={this.state.start_time}
 							onChangeText={(text) => this.setState({ start_time: text })}
 						/>
-					</ListItem>
-					<ListItem>
+					</Item>
+					<Item error={this.state.wrong_time}>
 						<Input
 							placeholder="Set End Time"
 							value={this.state.finish_time}
 							onChangeText={(text) => this.setState({ finish_time: text })}
 						/>
-					</ListItem>
+					</Item>
 					<ListItem itemDivider>
 						<Text style={styles.primText}>Insert Title</Text>
 					</ListItem>
@@ -148,18 +160,20 @@ class BookService extends React.Component {
 					<ListItem itemDivider>
 						<Text style={styles.primText}>Price Your Post</Text>
 					</ListItem>
-					<ListItem>
+					<Item 
+						error={this.state.wrong_price}
+					>
 						<Input
 							placeholder="Maximum Price"
-							value={this.state.maxPrice}
-							onChangeText={(text) => this.setState({ maxPrice: text })}
+							value={this.state.price_high}
+							onChangeText={(text) => this.setState({ price_high: text })}
 						/>
 						<Input
 							placeholder="Minimum Price"
-							value={this.state.minPrice}
-							onChangeText={(text) => this.setState({ minPrice: text })}
+							value={this.state.price_low}
+							onChangeText={(text) => this.setState({ price_low: text })}
 						/>
-					</ListItem>
+					</Item>
 					<ListItem itemDivider>
 						<Text style={styles.primText}>Select Your Location</Text>
 					</ListItem>

@@ -20,8 +20,6 @@ module.exports = {
 		const postURL = `${BASE_URL}postings/create`;
 		let res = await axios.post(postURL, postObject);
 
-		console.log(res);
-
-		return res;
+		return res.data;
 	}
 }
